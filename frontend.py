@@ -1,5 +1,7 @@
 from tkinter import *
-import backend
+from backend import Database
+
+database = Database("books.db")
 
 
 def change_entries(title="", author="", year="", isbn=""):
@@ -20,24 +22,23 @@ def get_selected_row(event):
         selected_row = list1.get(index)
         change_entries(selected_row[1], selected_row[2],
                        selected_row[3], selected_row[4])
-    
 
 
 def view_command():
     list1.delete(0, END)
-    for row in backend.view():
+    for row in database.view():
         list1.insert(END, row)
 
 
 def search_command():
     list1.delete(0, END)
-    for row in backend.search(title=title_text.get(), author=author_text.get(), year=year_text.get(), isbn=isbn_text.get()):
+    for row in database.search(title=title_text.get(), author=author_text.get(), year=year_text.get(), isbn=isbn_text.get()):
         list1.insert(END, row)
 
 
 def add_command():
-    backend.insert(title=title_text.get(), author=author_text.get(),
-                   year=year_text.get(), isbn=isbn_text.get())
+    database.insert(title=title_text.get(), author=author_text.get(),
+                    year=year_text.get(), isbn=isbn_text.get())
     list1.delete(0, END)
     list1.insert(END, (title_text.get(), author_text.get(),
                  year_text.get(), isbn_text.get()))
@@ -45,14 +46,14 @@ def add_command():
 
 
 def update_command():
-    backend.update(id=selected_row[0], title=title_text.get(), author=author_text.get(),
-                   year=year_text.get(), isbn=isbn_text.get())
+    database.update(id=selected_row[0], title=title_text.get(), author=author_text.get(),
+                    year=year_text.get(), isbn=isbn_text.get())
     change_entries()
     view_command()
 
 
 def delete_command():
-    backend.delete(selected_row[0])
+    database.delete(selected_row[0])
     change_entries()
     view_command()
 
